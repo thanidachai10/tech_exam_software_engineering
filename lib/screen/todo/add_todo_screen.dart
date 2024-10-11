@@ -47,6 +47,7 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
 
   @override
   void initState() {
+    //clear todoController ให้เป็นค่าว่างตอนเข้ามาเพิ่ม
     todoController.titleController.clear();
     todoController.descriptionController.clear();
     super.initState();

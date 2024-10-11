@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
+              //showModalBottomSheet ที่ sort data ตาม status และวันที่
               showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
@@ -210,11 +211,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: _refreshTodos,
                 child: Obx(
                   () {
+                    
                     final todos = todoController.todos;
                     final searchResults = todoController.searchResults;
                     final hasSearched = todoController.hasSearched;
 
+                    //ได้ค้นหาไหม ?
                     if (!hasSearched.value) {
+                      //ถ้ายังไม่ค้นหา hasSearched =  false และ todos.isEmpty
                       return todos.isEmpty
                           ? Center(
                               child: Column(
@@ -235,7 +239,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             )
-                          : GridView.builder(
+                          :
+                          //ถ้ามีรายการ todos
+                          GridView.builder(
                               padding:
                                   const EdgeInsets.only(left: 16, right: 16),
                               gridDelegate:
@@ -285,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               },
                             );
+                      //ค้นหา hasSearched = true และไม่หาไม่เจอ
                     } else if (searchResults.isEmpty) {
                       return Center(
                         child: Column(
@@ -305,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       );
+                      //ค้นหา hasSearched = true และผลลัพธ์ isNotEmpty จะเช็คว่า searchResults == todos ไหม return Ui todos ตามเดิม
                     } else if (searchResults == todos) {
                       return GridView.builder(
                         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -354,6 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       );
+                      //หาก searchResults != todos ก็ให้แสดงผลลัพธ์จากการค้นหา
                     } else {
                       return GridView.builder(
                         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -413,10 +422,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // todoController.searchController.clear();
+          setState(() {
+            todoController.searchController.clear();
+            todoController.hasSearched.value = false;
+          });
           await Get.to(() => const AddToDoScreen());
-          todoController.titleController.clear();
-          todoController.descriptionController.clear();
         },
         tooltip: 'Add ToDo',
         child: const Icon(Icons.add),

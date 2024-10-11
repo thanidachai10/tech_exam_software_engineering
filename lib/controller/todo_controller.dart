@@ -23,6 +23,7 @@ class TodoController extends GetxController {
     super.onInit();
   }
 
+  //โหลด list todo
   loadTodos() {
     final box = GetStorage();
     if (box.hasData('todos')) {
@@ -37,11 +38,12 @@ class TodoController extends GetxController {
   void addTodo(ToDoModel todo) {
     todos.add(todo);
 
-    titleController.clear();
-    descriptionController.clear();
-    dateController.clear();
-    statusController.clear();
-    imageController.clear();
+    // ในหน้า Add Todo ได้ทำการ clear ค่าของ controller ใน initState แล้ว
+    // titleController.clear();
+    // descriptionController.clear();
+    // dateController.clear();
+    // statusController.clear();
+    // imageController.clear();
 
     saveTodos();
     loadTodos();
@@ -57,11 +59,11 @@ class TodoController extends GetxController {
   void removeTodo(String id) {
     todos.removeWhere((todo) => todo.id == id);
 
-    titleController.clear();
-    descriptionController.clear();
-    dateController.clear();
-    statusController.clear();
-    imageController.clear();
+    // titleController.clear();
+    // descriptionController.clear();
+    // dateController.clear();
+    // statusController.clear();
+    // imageController.clear();
 
     saveTodos();
     updateSearchResults(id);
@@ -105,11 +107,13 @@ class TodoController extends GetxController {
     }
   }
 
+  //เซฟ data ลง local storage
   saveTodos() {
     final box = GetStorage();
     box.write('todos', todos.map((todo) => todo.toJson()).toList());
   }
 
+  //ค้นหา todo ด้วย title และ description
   void search(String query) {
     hasSearched.value = true;
     if (query.isEmpty) {
@@ -124,10 +128,12 @@ class TodoController extends GetxController {
     }
   }
 
+  //อัปเดตการค้นหา
   void updateSearchResults(String id) {
     searchResults.removeWhere((todo) => todo.id == id);
   }
 
+  // sort ข้อมูลด้วย status
   void sortByStatus(String status) {
     todos.sort((a, b) {
       if (a.status == status && b.status != status) {
@@ -140,6 +146,7 @@ class TodoController extends GetxController {
     });
   }
 
+  // sort ข้อมูลด้วย วันที่ created
   void sortByDateCreated() {
     todos.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
   }
